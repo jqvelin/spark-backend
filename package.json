@@ -1,0 +1,34 @@
+{
+  "name": "spark-backend",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx --watch --env-file=.env src/index.ts",
+    "build": "tsc",
+    "prepare": "husky"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "^5.1.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.10",
+    "@typescript-eslint/parser": "^8.36.0",
+    "eslint": "^9.30.1",
+    "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "eslint --fix"
+  }
+}

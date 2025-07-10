@@ -1,11 +1,12 @@
+import cors from 'cors';
 import express from 'express';
 
+import { env } from '@/config';
+import { homepageRouter } from '@/routes/v1';
+
 const app = express();
+app.use(cors());
 
-app.get('/', (_, res) => {
-  res.send('Spark Backend is running');
-});
+app.use('/v1', homepageRouter);
 
-const PORT = process.env.PORT ?? 4000;
-
-app.listen(PORT, () => console.log(`Running on port ${PORT}`));
+app.listen(env.PORT, () => console.log(`Running on port ${env.PORT}`));

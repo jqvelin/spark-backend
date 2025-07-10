@@ -1,0 +1,1 @@
+export { scrapeHomepageData } from './scrapeHomepageData';

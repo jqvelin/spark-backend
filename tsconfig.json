@@ -3,12 +3,19 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
+    "moduleResolution": "bundler",
     "noUncheckedIndexedAccess": true,
     "outDir": "./dist",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "rootDir": "./src",
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
     "verbatimModuleSyntax": true
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true
   }
 }

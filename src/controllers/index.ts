@@ -1,0 +1,1 @@
+export { homepageDataController } from './homepageDataController';

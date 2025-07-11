@@ -7,3 +7,9 @@ export const trackSchema = z.object({
   artist: z.string(),
   duration: z.number()
 });
+
+export const trackPermissionSchema = z.object({
+  id: trackSchema.shape.id,
+  downloadable: z.boolean(),
+  playable: z.boolean()
+});

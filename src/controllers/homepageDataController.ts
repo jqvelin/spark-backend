@@ -1,3 +1,5 @@
+import { getTrackPermissions } from '@/external-api';
+import type { HomepageTrackCategories } from '@/models/track';
 import { scrapeHomepageData } from '@/services';
 import { cache, CACHE_KEYS } from '@/utils';
 
@@ -11,7 +13,37 @@ export const homepageDataController = async (_: Request, res: Response) => {
   }
 
   try {
-    const homepageData = await scrapeHomepageData();
+    const { trackCategories, albums } = await scrapeHomepageData();
+
+    const allowedTrackCategories: HomepageTrackCategories = {
+      fresh: [],
+      bestOfToday: [],
+      trendingWorldwide: [],
+      trendingInRussia: []
+    };
+
+    const trackIds = Object.values(trackCategories).flatMap((category) => {
+      return category.map(track => track.id);
+    });
+    const trackPermissions = await getTrackPermissions(trackIds);
+
+    for (let i = 0; i < Object.values(trackCategories).length; i++) {
+      const categoryTracks = Object.values(trackCategories)[i];
+
+      const allowedCategoryTracks = categoryTracks?.filter(track => {
+        const trackPermission = trackPermissions.find(permissionForTrack => permissionForTrack.id === track.id);
+        return trackPermission?.playable && trackPermission.downloadable;
+      });
+
+      allowedTrackCategories[Object.keys(allowedTrackCategories)[i] as keyof HomepageTrackCategories] = allowedCategoryTracks ?? [];
+    }
+
+
+    const homepageData = {
+      trackCategories: allowedTrackCategories,
+      albums
+    };
+
     cache.set(CACHE_KEYS.homepageData, homepageData);
     res.json(homepageData);
 

@@ -1,2 +1,3 @@
-export { homepageRouter } from './homepageRouter';
 export { albumsRouter } from './albumsRouter';
+export { artistsRouter } from './artistsRouter';
+export { homepageRouter } from './homepageRouter';

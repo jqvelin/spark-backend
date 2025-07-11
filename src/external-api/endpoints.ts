@@ -1,8 +1,9 @@
 import type { Album } from '@/models/album';
+import type { Artist } from '@/models/artist';
 
 export const API_ENDPOINTS = {
   homepage: '',
-  artist(artistId: string) {
+  artist(artistId: Artist['id']) {
     return `artist/${artistId}`;
   },
   album(albumId: Album['id']) {

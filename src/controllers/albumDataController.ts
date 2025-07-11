@@ -31,6 +31,7 @@ export const albumDataController = async (req: Request, res: Response) => {
     });
 
     const albumData = {
+      id: albumId,
       ...album,
       tracks: tracksWithPermissions
     };

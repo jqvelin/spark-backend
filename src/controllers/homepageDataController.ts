@@ -1,3 +1,4 @@
+import { getTrackPermissions } from '@/external-api';
 import { scrapeHomepageData } from '@/services';
 import { cache, CACHE_KEYS } from '@/utils';
 
@@ -11,7 +12,20 @@ export const homepageDataController = async (_: Request, res: Response) => {
   }
 
   try {
-    const homepageData = await scrapeHomepageData();
+    const { tracks, albums } = await scrapeHomepageData();
+
+    const trackIds = tracks.map((track) => track.id);
+    const trackPermissions = await getTrackPermissions(trackIds);
+    const allowedTracks = tracks.filter(track => {
+      const trackPermission = trackPermissions.find(permissionForTrack => permissionForTrack.id === track.id);
+      return (trackPermission?.downloadable && trackPermission?.playable);
+    });
+
+    const homepageData = {
+      tracks: allowedTracks,
+      albums
+    };
+
     cache.set(CACHE_KEYS.homepageData, homepageData);
     res.json(homepageData);
 

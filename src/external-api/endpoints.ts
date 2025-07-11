@@ -8,5 +8,6 @@ export const API_ENDPOINTS = {
   },
   searchResults(searchQuery: string) {
     return `search?q=${searchQuery}`;
-  }
+  },
+  trackPermissions: 'song_permissions'
 } as const;

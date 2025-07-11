@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 
-import { trackSchema } from './track.schema';
+import { trackPermissionSchema, trackSchema } from './track.schema';
 
 export type Track = z.infer<typeof trackSchema>;
 
@@ -10,3 +10,5 @@ export type HomepageTrackGroups = {
   bestOfToday: Track[],
   trendingInRussia: Track[]
 };
+
+export type TrackPermission = z.infer<typeof trackPermissionSchema>;

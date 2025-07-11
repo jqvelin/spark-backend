@@ -1,3 +1,4 @@
 export const ENDPOINTS = {
-  homepage: '/homepage'
+  homepage: '/homepage',
+  albums: '/albums/:albumId'
 } as const;

@@ -46,8 +46,6 @@ export const homepageDataController = async (_: Request, res: Response) => {
 
     cache.set(CACHE_KEYS.homepageData, homepageData);
     res.json(homepageData);
-
-    return;
   } catch {
     res.status(500).send('Could not get the homepage data');
   }

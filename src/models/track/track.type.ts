@@ -4,7 +4,7 @@ import { trackPermissionSchema, trackSchema } from './track.schema';
 
 export type Track = z.infer<typeof trackSchema>;
 
-export type HomepageTrackGroups = {
+export type HomepageTrackCategories = {
   fresh: Track[],
   trendingWorldwide: Track[],
   bestOfToday: Track[],

@@ -21,7 +21,7 @@ export const artistDataController = async (req: Request, res: Response) => {
 
   try {
     const artistPageHtml = await getArtistPageHtml(artistId);
-    const { tracks, ...artist } = scrapeArtistData(artistPageHtml);
+    const { tracks, ...artist } = await scrapeArtistData(artistId, artistPageHtml);
 
     const trackIds = tracks.map(track => track.id);
     const trackPermissions = await getTrackPermissions(trackIds);
@@ -31,7 +31,6 @@ export const artistDataController = async (req: Request, res: Response) => {
     });
 
     const artistData = {
-      id: artistId,
       ...artist,
       tracks: tracksWithPermissions
     };

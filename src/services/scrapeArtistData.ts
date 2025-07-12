@@ -1,14 +1,16 @@
 import { load } from 'cheerio';
 
+import { getArtistPageHtml } from '@/external-api';
 import type { Album } from '@/models/album';
-import { artistSchema } from '@/models/artist';
+import { artistSchema, type Artist } from '@/models/artist';
 import type { Track } from '@/models/track';
 
 import { scrapeAlbumData } from './scrapeAlbumData';
 import { scrapeTrackData } from './scrapeTrackData';
 
-export const scrapeArtistData = (stringifiedHtml: string) => {
+export const scrapeArtistData = async (artistId: Artist['id'], stringifiedHtml: string) => {
   const $ = load(stringifiedHtml);
+
   const name = $('.page__title').text().trim().slice(0, -12);
   const imageSrc = $('img.artist-image').attr('src');
 
@@ -30,7 +32,6 @@ export const scrapeArtistData = (stringifiedHtml: string) => {
   });
 
   const albums: Album[] = [];
-
   const albumElements = $('.d-sm-block .album-card');
 
   albumElements.each((_, element) => {
@@ -54,10 +55,44 @@ export const scrapeArtistData = (stringifiedHtml: string) => {
     }
   });
 
-  // Id is not present in DOM, but comes from the parental method
-  return artistSchema.omit({
-    id: true
-  }).parse({
+  /* In case the artist has many tracks, there are multiple pages for them,
+   * we must scrape them all to get all the tracks.
+  */
+  const navigationButtons = $('div[role=\'navigation\'] .btn');
+  const artistPagesCount = parseInt(
+    $(navigationButtons.get(navigationButtons.length - 2)).text()
+  ) || 1;
+
+  const artistPageFetchPromises: ReturnType<typeof getArtistPageHtml>[] = [];
+
+  if (artistPagesCount > 1)  {
+    for (let artistPage = 2; artistPage <= artistPagesCount; artistPage++) {
+      artistPageFetchPromises.push(getArtistPageHtml(artistId, artistPage));
+    }
+
+    const artistPagesHtml = await Promise.all(artistPageFetchPromises);
+    artistPagesHtml.forEach(artistPageHtml => {
+      const $$ = load(artistPageHtml);
+
+      const trackElements = $$('.playlist .track.song-item');
+      trackElements.each((_, element) => {
+        const trackElement = $$(element).html();
+
+        if (trackElement) {
+          try {
+            const track = scrapeTrackData(trackElement);
+            tracks.push(track);
+          } catch {
+            const trackElementStringifiedPart = trackElement.trim().slice(0, 100);
+            console.log(`Could not scrape a track element: ${trackElementStringifiedPart}...`);
+          }
+        }
+      });
+    });
+  }
+
+  return artistSchema.parse({
+    id: artistId,
     name,
     imageSrc,
     tracks,

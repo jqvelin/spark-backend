@@ -1,2 +1,2 @@
-export type { Artist } from './artist.type';
-export { artistSchema } from './artist.schema';
+export type { Artist, ArtistSearchResult } from './artist.type';
+export { artistSchema, artistSearchResultSchema } from './artist.schema';

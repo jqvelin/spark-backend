@@ -10,3 +10,8 @@ export const artistSchema = z.object({
   imageSrc: z.nullish(z.string()),
   albums: z.array(albumSchema)
 });
+
+export const artistSearchResultSchema = artistSchema.pick({
+  id: true,
+  name: true
+});

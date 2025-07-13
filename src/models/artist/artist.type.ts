@@ -1,5 +1,7 @@
 import { z } from 'zod/v4';
 
-import { artistSchema } from './artist.schema';
+import { artistSchema, artistSearchResultSchema } from './artist.schema';
 
 export type Artist = z.infer<typeof artistSchema>;
+
+export type ArtistSearchResult = z.infer<typeof artistSearchResultSchema>;

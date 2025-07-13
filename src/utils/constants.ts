@@ -10,5 +10,8 @@ export const CACHE_KEYS = {
   },
   artistData(artistId: Artist['id']) {
     return `artist-${artistId}`;
+  },
+  searchResults(searchQuery: string) {
+    return `search-results-${searchQuery}`;
   }
 } as const;

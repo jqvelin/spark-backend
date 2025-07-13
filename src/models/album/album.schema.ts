@@ -11,3 +11,8 @@ export const albumSchema = z.object({
   tracks: trackSchema.array(),
   genres: z.string().array()
 });
+
+export const albumSearchResultSchema = albumSchema.pick({
+  id: true,
+  title: true
+});

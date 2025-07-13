@@ -12,6 +12,14 @@ export const albumSchema = z.object({
   genres: z.string().array()
 });
 
+export const albumCardSchema = albumSchema.pick({
+  id: true,
+  coverSrc: true,
+  title: true,
+  artist: true,
+  artistId: true
+});
+
 export const albumSearchResultSchema = albumSchema.pick({
   id: true,
   title: true

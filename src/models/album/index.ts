@@ -1,2 +1,2 @@
-export type { Album, AlbumSearchResult } from './album.type';
-export { albumSchema, albumSearchResultSchema } from './album.schema';
+export type { Album, AlbumCard, AlbumSearchResult } from './album.type';
+export { albumSchema, albumCardSchema, albumSearchResultSchema } from './album.schema';

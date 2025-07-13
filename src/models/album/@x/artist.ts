@@ -1,1 +1,1 @@
-export { albumSchema } from '../album.schema';
+export { albumCardSchema } from '../album.schema';

@@ -1,7 +1,7 @@
 import { HTTPError } from 'ky';
 
 import { getAlbumPageHtml, getTrackPermissions } from '@/external-api';
-import { scrapeAlbumData } from '@/services';
+import { scrapeAlbumPage } from '@/services/scraping';
 import { cache, CACHE_KEYS } from '@/utils';
 
 import type { Request, Response } from 'express';
@@ -21,7 +21,7 @@ export const albumDataController = async (req: Request, res: Response) => {
 
   try {
     const albumPageHtml = await getAlbumPageHtml(albumId);
-    const { tracks, ...album } = scrapeAlbumData(albumPageHtml);
+    const { tracks, ...album } = scrapeAlbumPage(albumPageHtml);
 
     const trackIds = tracks.map(track => track.id);
     const trackPermissions = await getTrackPermissions(trackIds);

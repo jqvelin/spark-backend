@@ -1,6 +1,6 @@
 import { getTrackPermissions } from '@/external-api';
 import type { HomepageTrackCategories } from '@/models/track';
-import { scrapeHomepageData } from '@/services';
+import { scrapeHomepageData } from '@/services/scraping';
 import { cache, CACHE_KEYS } from '@/utils';
 
 import type { Request, Response } from 'express';
@@ -13,7 +13,7 @@ export const homepageDataController = async (_: Request, res: Response) => {
   }
 
   try {
-    const { trackCategories, albums } = await scrapeHomepageData();
+    const { trackCategories, albumCards } = await scrapeHomepageData();
 
     const allowedTrackCategories: HomepageTrackCategories = {
       fresh: [],
@@ -41,7 +41,7 @@ export const homepageDataController = async (_: Request, res: Response) => {
 
     const homepageData = {
       trackCategories: allowedTrackCategories,
-      albums
+      albumCards
     };
 
     cache.set(CACHE_KEYS.homepageData, homepageData);

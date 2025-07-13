@@ -1,7 +1,7 @@
 import { HTTPError } from 'ky';
 
 import { getArtistPageHtml, getTrackPermissions } from '@/external-api';
-import { scrapeArtistData } from '@/services';
+import { scrapeArtistPage } from '@/services/scraping';
 import { cache, CACHE_KEYS } from '@/utils';
 
 import type { Request, Response } from 'express';
@@ -21,7 +21,7 @@ export const artistDataController = async (req: Request, res: Response) => {
 
   try {
     const artistPageHtml = await getArtistPageHtml(artistId);
-    const { tracks, ...artist } = await scrapeArtistData(artistId, artistPageHtml);
+    const { tracks, ...artist } = await scrapeArtistPage(artistId, artistPageHtml);
 
     const trackIds = tracks.map(track => track.id);
     const trackPermissions = await getTrackPermissions(trackIds);

@@ -1,6 +1,6 @@
 import { HTTPError } from 'ky';
 
-import { getAlbumPageHtml, getTrackPermissions } from '@/external-api';
+import { getAlbumPageHtml, getPermittedTracks } from '@/external-api';
 import { scrapeAlbumPage } from '@/services/scraping';
 import { cache, CACHE_KEYS } from '@/utils';
 
@@ -23,17 +23,12 @@ export const albumDataController = async (req: Request, res: Response) => {
     const albumPageHtml = await getAlbumPageHtml(albumId);
     const { tracks, ...album } = scrapeAlbumPage(albumPageHtml);
 
-    const trackIds = tracks.map(track => track.id);
-    const trackPermissions = await getTrackPermissions(trackIds);
-    const tracksWithPermissions = tracks.filter(track => {
-      const trackPermission = trackPermissions.find(permissionForTrack => permissionForTrack.id === track.id);
-      return trackPermission?.playable && trackPermission.downloadable;
-    });
+    const permittedTracks = await getPermittedTracks(tracks);
 
     const albumData = {
       id: albumId,
       ...album,
-      tracks: tracksWithPermissions
+      tracks: permittedTracks
     };
 
     cache.set(CACHE_KEYS.albumData(albumId), albumData);

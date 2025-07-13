@@ -1,4 +1,4 @@
-import { getSearchResultsPageHtml, getTrackPermissions } from '@/external-api';
+import { getPermittedTracks, getSearchResultsPageHtml } from '@/external-api';
 import { scrapeSearchResults } from '@/services/scraping';
 import { cache, CACHE_KEYS } from '@/utils';
 
@@ -21,15 +21,10 @@ export const searchResultsController = async (req: Request, res: Response) => {
     const searchResultsPageHtml = await getSearchResultsPageHtml(query);
     const { trackSearchResults, ...searchResultsData } = scrapeSearchResults(searchResultsPageHtml);
 
-    const trackIds = trackSearchResults.map(track => track.id);
-    const trackPermissions = await getTrackPermissions(trackIds);
-    const tracksWithPermissions = trackSearchResults.filter(track => {
-      const trackPermission = trackPermissions.find(permissionForTrack => permissionForTrack.id === track.id);
-      return trackPermission?.playable && trackPermission.downloadable;
-    });
+    const permittedTracks = await getPermittedTracks(trackSearchResults);
 
     const searchResults = {
-      tracks: tracksWithPermissions,
+      tracks: permittedTracks,
       ...searchResultsData
     };
 

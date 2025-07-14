@@ -1,6 +1,6 @@
 import { pipeline } from 'node:stream/promises';
 
-import { streamingApi } from '@/external-api';
+import { getTrackStream } from '@/external-api';
 
 import type { Request, Response } from 'express';
 
@@ -18,29 +18,25 @@ export const streamController = async (req: Request, res: Response) => {
   }
 
   try {
-    const trackResponse = await streamingApi.get(`${trackId}.mp3`, {
-      headers: {
-        range
-      }
+    const { stream, responseHeaders } = await getTrackStream(trackId, {
+      range
     });
 
-    const trackStream = trackResponse.body;
-
-    if (!trackStream) {
+    if (!stream) {
       res.status(500).send(`Cannot stream track ${trackId}`);
       return;
     }
 
     res.writeHead(206, {
       'accept-ranges': 'bytes',
-      'content-range': trackResponse.headers.get('content-range')!,
-      'content-length': trackResponse.headers.get('content-length')!,
-      'content-type': trackResponse.headers.get('content-type')!,
-      'cache-control': trackResponse.headers.get('cache-control')!,
+      'content-range': responseHeaders.get('content-range')!,
+      'content-length': responseHeaders.get('content-length')!,
+      'content-type': responseHeaders.get('content-type')!,
+      'cache-control': responseHeaders.get('cache-control')!,
       'access-control-expose-headers': 'Content-Length, Content-Range'
     });
 
-    await pipeline(trackStream, res);
+    await pipeline(stream, res);
   } catch {
     // ignore ERR_STREAM_PREMATURE_CLOSE
   }

@@ -1,7 +1,8 @@
 import type { Album } from '@/models/album';
 import type { Artist } from '@/models/artist';
+import type { Track } from '@/models/track';
 
-export const API_ENDPOINTS = {
+export const DATA_API_ENDPOINTS = {
   homepage: '',
   artist(artistId: Artist['id'], artistPageNumber?: number) {
     if (artistPageNumber) {
@@ -18,3 +19,9 @@ export const API_ENDPOINTS = {
   },
   trackPermissions: 'song_permissions'
 } as const;
+
+export const STREAMING_API_ENDPOINTS = {
+  stream(trackId: Track['id']) {
+    return `online/${trackId}.mp3`;
+  }
+};

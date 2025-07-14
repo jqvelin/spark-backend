@@ -1,12 +1,12 @@
 import { trackPermissionSchema, type Track } from '@/models/track';
 
-import { api } from '../api';
-import { API_ENDPOINTS } from '../endpoints';
+import { dataApi } from '../dataApi';
+import { DATA_API_ENDPOINTS } from '../endpoints';
 
 export const getPermittedTracks = async (tracks: Track[]) => {
   const trackIds = tracks.map(track => track.id);
 
-  const response = await api.post(API_ENDPOINTS.trackPermissions, {
+  const response = await dataApi.post(DATA_API_ENDPOINTS.trackPermissions, {
     json: {
       ids: trackIds
     }

@@ -6,7 +6,8 @@ import {
   albumsRouter,
   artistsRouter,
   homepageRouter,
-  searchRouter
+  searchRouter,
+  streamRouter
 } from '@/routes/v1';
 
 const app = express();
@@ -16,5 +17,6 @@ app.use('/v1', homepageRouter);
 app.use('/v1', albumsRouter);
 app.use('/v1', artistsRouter);
 app.use('/v1', searchRouter);
+app.use('/v1', streamRouter);
 
 app.listen(env.PORT, () => console.log(`Running on port ${env.PORT}`));

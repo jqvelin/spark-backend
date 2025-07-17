@@ -9,7 +9,7 @@ export const scrapeAlbumPage = (stringifiedHtml: string) => {
   const $ = load(stringifiedHtml);
 
   const title = $('.page__title.page__title_album').text().trim();
-  const artist = $('.same-artist__item a').text().trim();
+  const artist = $('.same-artist__item a').first().text().trim();
   const artistId = $('.same-artist__item a')?.attr('href')?.slice(8).trim();
   const coverSrc = $('img.page__img').attr('src')?.replace('350x100', '400x400');
 

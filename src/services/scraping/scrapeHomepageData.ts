@@ -3,7 +3,7 @@ import { load } from 'cheerio';
 import { getHomepageHtml } from '@/external-api';
 import type { HomepageTrackCategories } from '@/models/track';
 
-import { scrapeAlbumCards } from './album-scraping/scrapeAlbumCards';
+import { scrapeAlbums } from './album-scraping/scrapeAlbums';
 import { scrapeTracks } from './track-scraping/scrapeTracks';
 
 export const scrapeHomepageData = async () => {
@@ -34,10 +34,10 @@ export const scrapeHomepageData = async () => {
   const trendingInRussiaTracks = scrapeTracks(homepage, trendingInRussia);
   trackCategories.trendingInRussia = trendingInRussiaTracks;
 
-  const albumCards = scrapeAlbumCards(homepage);
+  const albums = await scrapeAlbums(homepage);
 
   return {
     trackCategories,
-    albumCards
+    albums
   };
 };

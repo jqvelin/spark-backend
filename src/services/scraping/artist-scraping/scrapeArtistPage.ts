@@ -3,7 +3,7 @@ import { load } from 'cheerio';
 import { getArtistPageHtml } from '@/external-api';
 import { artistSchema, type Artist } from '@/models/artist';
 
-import { scrapeAlbumCards } from '../album-scraping/scrapeAlbumCards';
+import { scrapeAlbums } from '../album-scraping/scrapeAlbums';
 import { scrapeTracks } from '../track-scraping/scrapeTracks';
 
 export const scrapeArtistPage = async (artistId: Artist['id'], stringifiedHtml: string) => {
@@ -13,7 +13,7 @@ export const scrapeArtistPage = async (artistId: Artist['id'], stringifiedHtml: 
   const imageSrc = $('img.artist-image').attr('src');
 
   const tracks = scrapeTracks(stringifiedHtml);
-  const albumCards = scrapeAlbumCards(stringifiedHtml);
+  const albums = await scrapeAlbums(stringifiedHtml);
 
   /* In case the artist has many tracks, there are multiple pages for them,
    * we must scrape them all to get all the tracks.
@@ -42,6 +42,6 @@ export const scrapeArtistPage = async (artistId: Artist['id'], stringifiedHtml: 
     name,
     imageSrc,
     tracks,
-    albumCards
+    albums
   });
 };

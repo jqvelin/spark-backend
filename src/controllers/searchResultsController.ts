@@ -19,13 +19,13 @@ export const searchResultsController = async (req: Request, res: Response) => {
 
   try {
     const searchResultsPageHtml = await getSearchResultsPageHtml(query);
-    const { trackSearchResults, ...searchResultsData } = scrapeSearchResults(searchResultsPageHtml);
-
-    const permittedTracks = await getPermittedTracks(trackSearchResults);
+    const { tracks, albums, artists } = await scrapeSearchResults(searchResultsPageHtml);
+    const permittedTracks = await getPermittedTracks(tracks);
 
     const searchResults = {
       tracks: permittedTracks,
-      ...searchResultsData
+      albums,
+      artists
     };
 
     cache.set(CACHE_KEYS.searchResults(query), searchResults);

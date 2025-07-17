@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 
-import { trackSchema } from '@/models/track/@x/album';
+import { trackSchema } from '../track';
 
 export const albumSchema = z.object({
   id: z.string(),

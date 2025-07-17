@@ -1,7 +1,7 @@
 import { z } from 'zod/v4';
 
-import { albumCardSchema } from '@/models/album/@x/artist';
-import { trackSchema } from '@/models/track/@x/artist';
+import { albumCardSchema } from '../album';
+import { trackSchema } from '../track';
 
 export const artistSchema = z.object({
   id: z.string(),

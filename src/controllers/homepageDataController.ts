@@ -13,7 +13,7 @@ export const homepageDataController = async (_: Request, res: Response) => {
   }
 
   try {
-    const { trackCategories, albumCards } = await scrapeHomepageData();
+    const { trackCategories, albums } = await scrapeHomepageData();
 
     const permittedTrackCategories: HomepageTrackCategories = {
       fresh: [],
@@ -34,7 +34,7 @@ export const homepageDataController = async (_: Request, res: Response) => {
 
     const homepageData = {
       trackCategories: permittedTrackCategories,
-      albumCards
+      albums
     };
 
     cache.set(CACHE_KEYS.homepageData, homepageData);

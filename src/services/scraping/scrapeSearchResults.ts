@@ -1,15 +1,17 @@
-import { scrapeAlbumSearchResults } from './album-scraping/scrapeAlbumSearchResults';
-import { scrapeArtistSearchResults } from './artist-scraping/scrapeArtistSearchResults';
+import { scrapeAlbums } from './album-scraping/scrapeAlbums';
+import { scrapeArtists } from './artist-scraping/scrapeArtists';
 import { scrapeTracks } from './track-scraping/scrapeTracks';
 
-export const scrapeSearchResults = (stringifiedHtml: string) => {
-  const trackSearchResults = scrapeTracks(stringifiedHtml);
-  const albumSearchResults = scrapeAlbumSearchResults(stringifiedHtml);
-  const artistSearchResults = scrapeArtistSearchResults(stringifiedHtml);
+export const scrapeSearchResults = async (stringifiedHtml: string) => {
+  const tracks = scrapeTracks(stringifiedHtml);
+  const [artists, albums] = await Promise.all([
+    scrapeArtists(stringifiedHtml),
+    scrapeAlbums(stringifiedHtml)
+  ]);
 
   return {
-    trackSearchResults,
-    albumSearchResults,
-    artistSearchResults
+    tracks,
+    albums,
+    artists
   };
 };

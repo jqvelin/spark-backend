@@ -13,6 +13,9 @@ export const scrapeTracks = (stringifiedHtml: string, context?: BasicAcceptedEle
 
   trackElements.each((_, trackElement) => {
     const id = $('.track__user-panel', trackElement).attr('data-js-id');
+
+    if (tracks.some(track => track.id === id)) return;
+
     const coverSrc = $('.track__image', trackElement).attr('src');
     const artist = $('.track__user-panel', trackElement).attr('data-js-artist-name');
     const title = $('.track__user-panel', trackElement).attr('data-js-song-title');
@@ -35,6 +38,8 @@ export const scrapeTracks = (stringifiedHtml: string, context?: BasicAcceptedEle
 
     tracks.push(track);
   });
+
+
 
   return trackSchema.array().parse(tracks);
 };

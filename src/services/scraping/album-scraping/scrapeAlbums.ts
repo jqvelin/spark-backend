@@ -1,6 +1,5 @@
 import { load, type Cheerio } from 'cheerio';
 
-
 import { getAlbumPageHtml } from '@/external-api';
 import { albumSchema, type Album } from '@/models/album';
 
@@ -20,7 +19,9 @@ export const scrapeAlbums = async (stringifiedHtml: string) => {
   const isSearchResultsPage = $('.search-results-page').length > 0;
   if (isSearchResultsPage) {
     const albumElementsContainer = $('.col-xs-12')[$('.col-xs-12').length - 1];
-    albumElements = $('.collection-item a', albumElementsContainer);
+
+    // Filtering albums from the so called "collections", coming from the api
+    albumElements = $('.collection-item a[href^="/albums"]', albumElementsContainer);
 
     albumElements.each((_, element) => {
       const albumId = $(element).attr('href')?.slice(8);
